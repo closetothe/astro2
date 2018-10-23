@@ -1,3 +1,6 @@
+import settings
+from time import sleep
+a = settings.a
 class Pot:
     def __init__(self, x_pin, y_pin, tol):
         self.__x_pin = x_pin
