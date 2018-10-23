@@ -4,16 +4,16 @@ class Pot:
         self.__y_pin = y_pin
         self.tol = 50
         self.center = 512
-        # a.pinMode(self.__x_pin, a.INPUT)
-        # a.pinMode(self.__y_pin, a.INPUT)
+        a.pinMode(self.__x_pin, a.INPUT)
+        a.pinMode(self.__y_pin, a.INPUT)
     
     def x(self):
-        #return a.analogRead(self.__x_pin)
-        return "x"
+        return a.analogRead(self.__x_pin)
+       
 
     def y(self):
-        #return a.analogRead(self.__y_pin)
-        return "y"
+        return a.analogRead(self.__y_pin)
+        
 
 class Motor:
     def __init__(self, en, in1, in2, db):
@@ -24,24 +24,23 @@ class Motor:
         self.deadband = db
         self.pwm = 0
         self.isStopped = True
-        # a.digitalWrite(self.__in1, a.LOW);
-        # a.digitalWrite(self.__in2, a.HIGH); 
-        # a.analogWrite(self.__en, 0);
-        # a.delay(10)       
-        # a.pinMode(self.__en, a.OUTPUT);
-        # a.pinMode(self.__in1, a.OUTPUT);
-        # a.pinMode(self.__in2, a.OUTPUT); 
+        a.digitalWrite(self.__in1, a.LOW);
+        a.digitalWrite(self.__in2, a.HIGH); 
+        a.analogWrite(self.__en, 0);
+        sleep(0.01)    
+        a.pinMode(self.__en, a.OUTPUT);
+        a.pinMode(self.__in1, a.OUTPUT);
+        a.pinMode(self.__in2, a.OUTPUT); 
 
     def forward(self):
         print("fw")
-        # a.digitalWrite(self.__in1, a.LOW);
-        # a.digitalWrite(self.__in2, a.HIGH);    
+        a.digitalWrite(self.__in1, a.LOW);
+        a.digitalWrite(self.__in2, a.HIGH);    
   
 
     def reverse(self):
         print("bw")
-        # a.digitalWrite(self.__in1, a.HIGH);
-        # a.digitalWrite(self.__in2, a.LOW);     
+        a.digitalWrite(self.__in2, a.LOW);     
   
 
     def stop(self):
@@ -75,14 +74,14 @@ class Control:
 
         # Y Axis
         if y < (center - tol):
-            #pwm_y = a.map(y, (center - tol), 0, 0, 255)
+            pwm_y = a.map(y, (center - tol), 0, 0, 255)
             l.reverse()
             r.reverse()
             l.setSpeed(pwm_y)
             r.setSpeed(pwm_y)
 
         elif y > (center + tol):
-            #pwm_y = a.map(y, (center + tol), 1023, 0, 255);
+            pwm_y = a.map(y, (center + tol), 1023, 0, 255);
             l.forward()
             r.forward()
             l.setSpeed(pwm_y)
@@ -107,8 +106,7 @@ class Control:
         rpw = r.pwm
         tol = self.__pot.tol
         ctr = self.__pot.center
-        x = 1   
-        #x = a.map(amt, (ctr + tol), n, 0, 180);
+        x = a.map(amt, (ctr + tol), n, 0, 180);
 
         if l.isStopped and r.isStopped:
             # zero radius turn
