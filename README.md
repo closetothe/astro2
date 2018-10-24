@@ -15,6 +15,6 @@ So far, we have the following dependencies:
 * pygame
 * DualShock 3 drivers (see setup file)
 
-NEXT STEP: Get camera working
+**NEXT STEP: Get camera working**
 
-NEXT NEXT STEP: Get feedback control
+**NEXT NEXT STEP: Get feedback control**
