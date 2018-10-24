@@ -1,3 +1,7 @@
+# COURTESY OF il_diavolo on raspberry pi forums
+# https://www.raspberrypi.org/forums/viewtopic.php?t=137018
+# 2013
+
 sudo apt-get -y install bluetooth
 sudo apt-get -y install libusb-dev
 sudo apt-get -y install joystick
