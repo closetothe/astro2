@@ -2,6 +2,10 @@ from nanpy import (ArduinoApi, SerialManager)
 from time import sleep
 from controls import Axis, Remote, Motor, Control
 import pygame
+import os
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import cv2
 
 # H-bridge inputs
 # Motor 1
@@ -24,12 +28,17 @@ except:
   print("Failed to connect to Arduino")
 
 # Setup
+camera = PiCamera()
+camera.resolution = (640,480)
+camera.framerate = 60
+rawCapture = PiRGBArray(camera, size=(640,480))
+sleep(0.2)
+
 pygame.init()
 size = [100,100]
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Astro Prototype 2.1")
 clock = pygame.time.Clock()
-
 if pygame.joystick.get_count() > 0:
     joystick = pygame.joystick.Joystick(0)
     joystick.init()
@@ -47,17 +56,26 @@ right.stop()
 left.stop()
 a.pinMode(BTN, a.INPUT)
 a.pinMode(LED, a.OUTPUT)
-i = 0
+sleep(0.1)
+
 # Loop
-while True:
+for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     pygame.event.pump()
-    if i < 50:
-        right.stop()
-        left.stop()
+    if joystick.get_button(0):
+        os.system("raspistill --width 1920 --height 1080 -o photo.jpg")
+        print("Photo saved.")
+    if joystick.get_button(9):
+        break
     else:
         ctl.listen()
+    img = frame.array
+ 
+    if joystick.get_button(1):
+        cv2.imshow("Video Feed", img)
+        key = cv2.waitKey(1) & 0xFF
+
+    rawCapture.truncate(0)
     pygame.display.flip()
-    i = i + 1
     clock.tick(60)
 
 
