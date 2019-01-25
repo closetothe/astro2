@@ -1,4 +1,4 @@
-### Astro Differential Drive
+# Astro Differential Drive
 
 This is a simple package that implements an open-loop diff drive. 
 
@@ -24,14 +24,14 @@ The launch file runs:
 
 ## diff_drive node
 
-# Published topics
+### Published topics
 `cmd_vel/left` - (std_msgs/Float32)
     Left velocity in m/s
 
 `cmd_vel/right` - (std_msgs/Float32)
     Right velocity in m/s
 
-# Subscribed topics
+### Subscribed topics
 `cmd_vel` - (geometry_msgs/Twist)
     Standard velocity command. Only linear.x and angular.z are used.
 

@@ -1,4 +1,4 @@
-### Installation instructions
+## Installation instructions
 
 1. Download arduino for Linux. This should be a folder named "arduino-[version]".
 2. Rename it to "arduino".
