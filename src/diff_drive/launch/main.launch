@@ -1,0 +1,13 @@
+<launch>
+  <include file="$(find diff_drive)/launch/drivers.launch" />
+  <include file="$(find teleop_twist_joy)/launch/teleop.launch" />
+  <rosparam param="ticks_meter">4964</rosparam>
+  <rosparam param="base_width">0.308</rosparam>
+
+  <node pkg="diff_drive" type="diff_drive" name="diff_drive" output="screen">
+	  <rosparam param="base_width">0.308</rosparam>
+  </node>
+  <node pkg="differential_drive" type="diff_tf.py" name="diff_odom_tf" output="screen">
+    <rosparam param="base_width">0.308</rosparam>
+  </node>
+</launch>
