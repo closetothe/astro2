@@ -1,4 +1,4 @@
-# ASTRO 2.0 - Autonomous Delivery Robot
+# ASTRO 2 - Autonomous Delivery Robot
 ## Prototype 0.2
 
 ### Current features:
