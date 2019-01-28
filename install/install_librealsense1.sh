@@ -22,7 +22,7 @@ clear
 # RealSense Library
 if [ ! -d $RS_DIR ] || [ ! -e $RSLIB_PATH ]
 then
-	printf "\nRealSense library not found. Installing now...\n\n"
+	printf "\n\e[34mRealSense 1.* library not found. Installing now...\e[0m\n\n"
 	apt-get install libusb-1.0-0-dev libglfw3-dev
 	
 	if [ -d $DOWNLOADS/librealsense* ] || [ -e $DOWNLOADS/librealsense* ]
@@ -32,22 +32,22 @@ then
 
 	wget -O $DOWNLOADS/librealsense.zip https://github.com/IntelRealSense/librealsense/archive/v1.12.1.zip
 	
-	if [ -d $DESKTOP/librealsense ]
+	if [ -d $DESKTOP/librealsense1 ]
 	then
-		rm -rf $DESKTOP/librealsense
+		rm -rf $DESKTOP/librealsense1
 	fi
 	unzip $DOWNLOADS/librealsense.zip -d $DOWNLOADS/librealsense
-	mv $DOWNLOADS/librealsense/librealsense-1* $DESKTOP/librealsense
+	mv $DOWNLOADS/librealsense/librealsense-1* $DESKTOP/librealsense1
 	rm -rf $DOWNLOADS/librealsense	
-	mkdir $DESKTOP/librealsense/build
-	cd $DESKTOP/librealsense/build
+	mkdir $DESKTOP/librealsense1/build
+	cd $DESKTOP/librealsense1/build
 	cmake .. -DBUILD_EXAMPLES:BOOL=true
-	make && make install
+	make && sudo make install && printf "\n\e[32mSuccessfully installed RealSense SDK 1.12\e[0m\n\n"
 	printf "\nPatching uvc video drivers...\n\n"
-	.$DESKTOP/librealsense/scripts/patch-uvcvideo-16.04.simple.sh
+	bash $DESKTOP/librealsense1/scripts/patch-uvcvideo-16.04.simple.sh
 	modprobe uvcvideo
-	printf "\nRS example demos have been installed to /usr/local/bin\n\n"
+	printf "\n\e[34mRS example demos have been installed to /usr/local/bin\e[0m\n\n"
 else
-	printf "\nRealSense library is already installed.\n\n"
+	printf "\n\e[34mRealSense library is already installed.\e[0m\n\n"
 fi
 
