@@ -1,6 +1,7 @@
 sudo chmod +x *
+sudo chmod +x ../vnc.sh
 
-if [ ! -d arduino ]
+if [ -d arduino ]
 then
 	sudo ./install_core.sh
 	sudo ./install_arduino.sh		
