@@ -20,4 +20,4 @@ make -j2
 sudo checkinstall
 sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 sudo ldconfig
-echo "\e[32mOpenCV" $version "ready to be used\e[0m"
+echo "OpenCV" $version "ready to be used"

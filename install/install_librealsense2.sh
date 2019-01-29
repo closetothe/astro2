@@ -25,8 +25,8 @@ sudo modprobe uvcvideo
 #sudo ./scripts/patch-realsense-ubuntu-odroid-xu4-4.14.sh
 sudo ./scripts/patch-realsense-ubuntu-odroid.sh
 
-mkdir ~/Desktop/librealsense/build
-cd ~/Desktop/librealsense/build
+mkdir ~/Desktop/librealsense2/build
+cd ~/Desktop/librealsense2/build
 
 cmake .. -DBUILD_EXAMPLES=true -DBUILD_PYTHON_BINDINGS=true -DCMAKE_BUILD_TYPE=Release
 

@@ -5,13 +5,13 @@
 
 printf "\n\e[34mInstalling the newest CMake\e[0m\n\n"
 
-if [ -d ~/Downloads/cmake_source ]1m
+if [ -d ~/Downloads/cmake_source ]
 then
 	rm -rf ~/Downloads/cmake_source
 fi
 
 git clone https://github.com/Kitware/CMake.git ~/Downloads/cmake_source
 
-cd cmake_source
-./bootstrap && make && sudo make install && printf "\n\e[32mSuccessfully installed CMake\e[0m\n\n"
+cd ~/Downloads/cmake_source
+./bootstrap && make -j4 && sudo make install && printf "\n\e[32mSuccessfully installed CMake\e[0m\n\n"
 

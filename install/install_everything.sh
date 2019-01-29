@@ -3,10 +3,7 @@ sudo chmod +x ../vnc.sh
 
 if [ -d arduino ]
 then
-	sudo ./install_core.sh
-	sudo ./install_arduino.sh		
-	sudo ./install_opencv.sh
-	sudo ./install_ros.sh
-	sudo ./install_ros_deps.sh
+	./install_core.sh && ./install_arduino.sh && ./install_opencv.sh && ./install_ros.sh && ./install_ros_deps.sh && ./install_cmake.sh && ./install_librealsense2.sh
 else
-	printf "\n'arduino' folder not found. Please download the arduino installation folder, put it here, and rename it as 'arduino'.\n"
+	printf "\n'arduino' folder not found. Please download the arduino installation folder, put it here, and rename it as 'arduino'\n"
+fi
