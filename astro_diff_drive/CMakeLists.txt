@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(diff_drive)
+project(astro_diff_drive)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -200,7 +200,7 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(diff_drive src/diff_drive.cpp)
-target_link_libraries(diff_drive ${catkin_LIBRARIES})
+add_executable(astro_diff_drive src/diff_drive.cpp)
+target_link_libraries(astro_diff_drive ${catkin_LIBRARIES})
 #add_dependencies(diff_drive beginner_tutorials_gencpp)
 

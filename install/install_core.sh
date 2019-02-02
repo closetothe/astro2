@@ -19,7 +19,7 @@ sudo systemctl disable apt-daily.service
 sudo systemctl disable apt-daily.timer
 
 # sudo apt-get -y install linux-firmware
-sudo apt-get -y install libc6-dev build-essential dkms git cmake i2c-tools python-smbus dconf-tools doxygen pkg-config wget curl unzip x11vnc xorg openbox evince xboxdrv
+sudo apt-get -y install libc6-dev build-essential dkms git cmake i2c-tools python-smbus dconf-tools vim doxygen pkg-config wget curl unzip x11vnc xorg openbox evince xboxdrv
 
 printf "\n\e[34mInstalling Odroid Utility\e[0m\n\n"
 sudo wget -O /usr/local/bin/odroid-utility.sh https://raw.githubusercontent.com/mdrjr/odroid-utility/master/odroid-utility.sh

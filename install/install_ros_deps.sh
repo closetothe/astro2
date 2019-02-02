@@ -2,12 +2,14 @@ sudo apt-get -y install ros-kinetic-ros-control ros-kinetic-ros-controllers ros-
 
 source ~/.bashrc
 
-printf "\n\n--------------------------\nSetting up catkin workspace at ~/ws\n--------------------------\n\n"
+printf "\n\e[34mSetting up catkin workspace at ~/ws\e[0m\n\n"
 mkdir -p ~/ws/src
 cd ~/ws
 catkin_make
-
-printf "\n\n--------------------------\nCatkin workspace created at ~/ws\n--------------------------\n\n"
+echo "source ~/ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+printf "\n\e[32mCatkin workspace created at ~/ws\e[0m\n\n"
 
 
 ./install_ros_differential_drive.sh
+./install_ros_realsense2.sh
