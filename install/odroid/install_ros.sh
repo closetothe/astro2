@@ -20,7 +20,7 @@ sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net --recv-key 421C365
 sudo apt-get update
 
 prinf "\nDoing the rest...\n\n"
-sudo apt-get install ros-kinetic-desktop-full
+sudo apt-get --yes install ros-kinetic-desktop-full
 sudo rosdep init
 rosdep update
 echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc

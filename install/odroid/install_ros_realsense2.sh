@@ -21,6 +21,6 @@ else
 	printf "\n\e[32mros-realsense v2.1.4 installed to ~/ws/src\e[0m\n\n"
 
 	printf "\n\e[34mInstalling rgbd-launch\e[0m\n\n"
-	sudo apt-get install ros-kinetic-rgbd-launch
+	sudo apt-get --yes install ros-kinetic-rgbd-launch
 	printf "\n\e[32mDone installing realsense ros wrapper\e[0m\n\n"
 fi
