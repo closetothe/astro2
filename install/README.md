@@ -11,7 +11,7 @@ NOTE: `install_everything` is a bit finicky (it won't stop if one of the scripts
 3. OpenCV, OpenGL, and CMake 5
 4. RealSense SDK 2.0
 5. ROS  
-**IMPORTANT**: `source ~/.bashrc`
+- **IMPORTANT**: `source ~/.bashrc`
 6. ROS Dependencies 
 - Installs the ROS Arduino library at the default `~/Arduino/libraries`
 - Creates a catkin workspace at `~/ws`
