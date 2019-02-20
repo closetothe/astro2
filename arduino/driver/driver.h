@@ -1,7 +1,7 @@
 // H-bridge inputs
 // Motor 1
 #define ENA 10
-#define IN1 11
+#define IN1 12
 #define IN2 13
 // Motor 2
 #define ENB 3

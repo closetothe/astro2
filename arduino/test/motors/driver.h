@@ -8,10 +8,6 @@
 #define IN3 4
 #define IN4 5
 
-// LEDs
-#define LED_LEFT A4
-#define LED_RIGHT A5
-
 // Min and max velocity per wheel
 // (in m/s)
 // Note

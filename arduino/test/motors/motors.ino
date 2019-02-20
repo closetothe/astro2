@@ -12,26 +12,22 @@
 #include "driver.h"
 #include "Motor.h"
 
-#include <ros.h>  
-#include <std_msgs/Float32.h>
-
-ros::NodeHandle  nh;
-
 // Instantiate motors
-Motor right = Motor(ENA, IN1, IN2, 0, LED_RIGHT);
-Motor left = Motor(ENB, IN3, IN4, 0, LED_LEFT);
+Motor right = Motor(ENA, IN1, IN2, 0);
+Motor left = Motor(ENB, IN3, IN4, 0);
 
-void left_cb(const std_msgs::Float32& cmd){
+void left_cmd(float cmd){
   // cmd is in m/s
   
-  if(abs(cmd.data) >= VMIN){
+  if(abs(cmd) >= VMIN){
     
     // Experimental relationship between velocity and pwm
     int pwm;
-    if (abs(cmd.data) > VMAX) pwm = 255;
-    else pwm = (int)(830.87*abs(cmd.data) - 25.617);
+    if (abs(cmd) > VMAX) pwm = 255;
+    // TODO: UPDATE EQUATION
+    else pwm = (int)(830.87*abs(cmd) - 25.617);
     
-    if (cmd.data > 0) left.forward();
+    if (cmd > 0) left.forward();
     else left.reverse();
 
     left.setSpeed(pwm);    
@@ -41,18 +37,17 @@ void left_cb(const std_msgs::Float32& cmd){
   }
 }
 
-void right_cb(const std_msgs::Float32& cmd){
+void right_cmd(float cmd){
   // cmd is in m/s
   
-  if(abs(cmd.data) >= VMIN){
+  if(abs(cmd) >= VMIN){
     
     // Experimental relationship between velocity and pwm
-    // Right motor moves a little faster
     int pwm;
-    if (abs(cmd.data) > VMAX) pwm = 250;
-    else pwm = (int)(830.87*abs(cmd.data) - 20.617);
+    if (abs(cmd) > VMAX) pwm = 250;
+    else pwm = (int)(830.87*abs(cmd) - 20.617);
     
-    if (cmd.data > 0) right.forward();
+    if (cmd > 0) right.forward();
     else right.reverse();
 
     right.setSpeed(pwm);    
@@ -62,22 +57,20 @@ void right_cb(const std_msgs::Float32& cmd){
   }
 } 
 
-ros::Subscriber<std_msgs::Float32> left_motor_sub("/cmd_vel/left", left_cb);
-ros::Subscriber<std_msgs::Float32> right_motor_sub("/cmd_vel/right", right_cb);
+unsigned char lpwm = 255;
+unsigned char rpwm = 255;
 
 void setup()
 {
   right.init();
   left.init();
-  pinMode(LED_LEFT, OUTPUT);
-  pinMode(LED_RIGHT, OUTPUT);
-  nh.initNode();
-  nh.subscribe(left_motor_sub);
-  nh.subscribe(right_motor_sub);
+  left.reverse();
+  right.reverse();
+  left.setSpeed(lpwm); 
+  right.setSpeed(rpwm); 
 }
 
 void loop()
 {
-  nh.spinOnce();
   delay(30);
 }

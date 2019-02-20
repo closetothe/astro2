@@ -3,7 +3,6 @@ class Motor{
   int en, in1, in2;
   int MOTORLOW = LOW;
   int MOTORHIGH = HIGH;  
-  int led;
   
   public:
   int pwm;
@@ -12,22 +11,21 @@ class Motor{
 
   
   Motor(){}
-  Motor(int en, int in1, int in2, int db, int led){
+  Motor(int en, int in1, int in2, int db){
     this->en = en;
     this->in1 = in1;
     this->in2 = in2;
     this->deadband = db;
-    this->led = led;
     pinMode(this->en, OUTPUT);
     pinMode(this->in1, OUTPUT);
     pinMode(this->in2, OUTPUT);    
   }
-  Motor(int en, int in1, int in2, int db, int led, int polarity){
+  Motor(int en, int in1, int in2, int db, int polarity){
     if (polarity) {
       this->MOTORLOW = HIGH;
       this->MOTORHIGH = LOW;
     }
-    Motor(en, in1, in2, db, led);
+    Motor(en, in1, in2, db);
   }
 
   void init(){
@@ -54,13 +52,11 @@ class Motor{
     if(pwm > deadband) {
       this->pwm = pwm;
       isStopped = false; 
-      digitalWrite(led, HIGH);
     }
     else {
       this->pwm = 0;
       forward();
       isStopped = true;
-      digitalWrite(led, LOW); 
     }
     analogWrite(this->en, this->pwm);  
   }

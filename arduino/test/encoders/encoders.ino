@@ -1,7 +1,7 @@
 //=========================HEADER=============================================================
 /*
    Dual LS7366 Quadrature Counter Test Code
-   AUTHOR: Jason Traud (Modified for ROS by Jamiel Rahi)
+   AUTHOR: Jason Traud
    DATE: June 22, 2013
    
    This is a simple test program to read encoder counts
@@ -30,16 +30,6 @@
 // Inclde the standard Arduino SPI Library, please ensure the SPI pins are
 // connected properly for your Arduino version
 #include <SPI.h>
-#include <Servo.h>
-#include <ros.h>
-#include <std_msgs/Int16.h>
-#include <std_srvs/Empty.h>
-
-ros::NodeHandle nh;
-std_msgs::Int16 left_ticks;
-std_msgs::Int16 right_ticks;
-ros::Publisher lpub("lwheel", &left_ticks);
-ros::Publisher rpub("rwheel", &right_ticks);
 
 // Slave Select pins for encoders 1 and 2
 // Feel free to reallocate these pins to best suit your circuit
@@ -47,8 +37,8 @@ const int slaveSelectEnc1 = 7;
 const int slaveSelectEnc2 = 8;
 
 // These hold the current encoder count.
-signed int encoderLcount = 0;
-signed int encoderRcount = 0;
+signed long encoder1count = 0;
+signed long encoder2count = 0;
 
 void initEncoders() {
   
@@ -86,11 +76,11 @@ void initEncoders() {
   digitalWrite(slaveSelectEnc2,HIGH);       // Terminate SPI conversation 
 }
 
-int readEncoder(int encoder) {
+long readEncoder(int encoder) {
   
   // Initialize temporary variables for SPI read
   unsigned int count_1, count_2, count_3, count_4;
-  int count_value;  
+  long count_value;  
   
   // Read encoder 1
   if (encoder == 1) {
@@ -161,45 +151,20 @@ void clearEncoderCount() {
   digitalWrite(slaveSelectEnc2,HIGH);     // Terminate SPI conversation 
 }
 
-void clearEncoderCB(std_srvs::Empty::Request, std_srvs::Empty::Response)
-{
-  clearEncoderCount();
-}
-
-ros::ServiceServer<std_srvs::Empty::Request, 
-                   std_srvs::Empty::Response> server("reset_encoders",&clearEncoderCB);
-
-Servo servo;
-
-// // // //
-// BEGIN //
-// // // //
 
 void setup() {
- nh.initNode();
- nh.advertise(lpub);
- nh.advertise(rpub);
- nh.advertiseService(server);
+ Serial.begin(9600);      // Serial com for data output
  
- initEncoders(); 
- clearEncoderCount();
-
- // Initialize servo
- servo.attach(4); 
- servo.write(90); 
+ initEncoders();       Serial.println("Encoders Initialized...");  
+ clearEncoderCount();  Serial.println("Encoders Cleared...");
 }
 
 void loop() {
+ delay(500);
+ 
  // Retrieve current encoder counters
- encoderLcount = readEncoder(1); 
- encoderRcount = readEncoder(2);
-
- left_ticks.data = encoderLcount;
- right_ticks.data = encoderRcount;
+ encoder1count = readEncoder(1); 
+ encoder2count = readEncoder(2);
  
- lpub.publish(&left_ticks);
- rpub.publish(&right_ticks);
- nh.spinOnce();
- 
- delay(30);
+ Serial.print("Enc1: "); Serial.print(encoder1count); Serial.print(" Enc2: "); Serial.println(encoder2count); 
 }
