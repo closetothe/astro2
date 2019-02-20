@@ -1,9 +1,39 @@
 ## Installation instructions
+##### (Requires Ubuntu 16.04)
 
-1. Download arduino for Linux. This should be a folder named "arduino-[version]".
+The ASTRO 2 robot uses both an ODROID XU4 (armhf) and a MacBook Pro running Ubuntu 16.04 (amd64). Installation scripts that work in both environments are in this folder, and the rest are separated in their respective folders.
+
+
+NOTE 1: `install_everything` is a bit finicky (it won't stop if one of the scripts fails). I suggest running the scripts individually in roughly this order:
+
+1. Core
+2. Arduino
+3. OpenCV, OpenGL, and CMake 5
+4. RealSense SDK 2.0
+5. ROS
+**IMPORTANT**: `source ~/.bashrc`
+6. ROS Dependencies 
+- Installs the ROS Arduino library at the default `~/Arduino/libraries`
+- Creates a catkin workspace at `~/ws`
+**IMPORTANT**: `source ~/.bashrc`
+7. ROS Diff Drive
+8. ROS RealSense
+
+
+### ODROID XU4
+
+1. Download arduino for Linux from the Arduino website. This should be a folder named "arduino-[version]".
 2. Rename it to "arduino".
-3. Put it in this directory.
-4. Run `sudo chmod +x install_everything.sh`
-5. Run `sudo ./install_everything.sh`
+3. Put it in the `odroid` directory.
+4. Open a terminal and `cd` into the `odroid` directory.
+5. Run `sudo chmod +x install_everything.sh`
+6. Run `sudo ./install_everything.sh`
 
-Note that `install_ros_deps.sh` will create a catkin workspace at `~/ws`. If this doesn't work for some reason, create your own with the name `ws` and run `install_ros_differential_drive.sh` to install the (depreciated) `differential_drive` dependency.
+### AMD64
+
+1. Download arduino for Linux from the Arduino website. This should be a folder named "arduino-[version]".
+2. Rename it to "arduino".
+3. Put it in the `amd64` directory.
+4. Open a terminal and `cd` into the `amd64` directory.
+5. Run `sudo chmod +x install_everything.sh`
+6. Run `sudo ./install_everything.sh`

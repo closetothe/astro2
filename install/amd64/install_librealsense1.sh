@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DOWNLOADS="/home/odroid/Downloads"
-DESKTOP="/home/odroid/Desktop"
+DOWNLOADS="~/Downloads"
+DESKTOP="~/Desktop"
 RS_DIR="/usr/local/include/librealsense"
 GLFW_DIR="/usr/local/include/GLFW"
 RSLIB_PATH="/usr/local/lib/librealsense*"

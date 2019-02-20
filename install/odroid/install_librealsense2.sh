@@ -1,4 +1,4 @@
-printf "\n\n--- THIS IS GOING TO TAKE A WHILE ---\n\n"
+printf "\n\n\e[34m--- THIS IS GOING TO TAKE A WHILE ---\e[0m\n\n"
 
 printf "\n\e[34mInstalling librealsense dependencies\e[0m\n"
 

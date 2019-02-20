@@ -1,3 +1,14 @@
+# Jamiel Rahi 2019
+# github.com/closetothe/
+# Concordia University MIE
+# ASTRO 2 Capstone Project
+
+###############################
+## TESTED ONLY ON ODROID XU4 ##
+###############################
+
+# This script installs basic packages for a clean-slate ODROID XU4
+
 clear
 
 printf "\n\e[34mEnabling auto-login for headless SSH to work\e[0m\n\n"
