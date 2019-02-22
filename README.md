@@ -1,5 +1,5 @@
 # ASTRO 2 - Autonomous Delivery Robot
-## Prototype 0.2
+## Prototype 0.3
 
 ### Current features:
 * Runs on ROS
@@ -10,7 +10,6 @@
 * Fully wireless
 * Manual Xbox 360 wireless remote control
 * URDF robot description
+* Robot state publisher
 
-First stable system.
-
-**NEXT STEP: Navigation**
+Stable teleop system, inching towards navigation.
