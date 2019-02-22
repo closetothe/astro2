@@ -1,3 +1,7 @@
+// // // // // // // // // // // // // // // // // // //
+//   REPLACE WITH YOUR HARDWARE-SPECIFIC PARAMETERS   //
+// // // // // // // // // // // // // // // // // // //
+
 // H-bridge inputs
 // Motor 1
 #define ENA 10
@@ -12,8 +16,27 @@
 #define LED_LEFT A4
 #define LED_RIGHT A5
 
-// Min and max velocity per wheel
+// Min and max velocity
 // (in m/s)
-// Note
-#define VMIN 0.07 // PWM = 80
-#define VMAX 0.16 // PWM = 255
+#define VMIN 0.0
+#define VMAX 0.5
+
+// PWM (i.e. voltage) limit
+#define RLIMIT 200
+#define LLIMIT 200
+
+// Experimental coefficients
+// pwm = a*(rpm) + b
+#define RIGHTA 800
+#define RIGHTB -27.8
+#define LEFTA 800
+#define LEFTB -27.8
+
+// Motor deadbands
+#define LEFTDB 30
+#define RIGHTDB 30
+
+// Wheel diameters
+// (in meters)
+#define LDIA 0.1524
+#define RDIA 0.1524

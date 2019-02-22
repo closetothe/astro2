@@ -4,7 +4,9 @@ class Motor{
   int MOTORLOW = LOW;
   int MOTORHIGH = HIGH;  
   int led;
-  
+  int max_pwm = 250;
+  float a, b, dia;
+
   public:
   int pwm;
   int deadband = 70;
@@ -51,17 +53,44 @@ class Motor{
   }
 
   void setSpeed(int pwm){
-    if(pwm > deadband) {
-      this->pwm = pwm;
-      isStopped = false; 
-      digitalWrite(led, HIGH);
-    }
-    else {
+    if(pwm < deadband) {
       this->pwm = 0;
       forward();
       isStopped = true;
       digitalWrite(led, LOW); 
     }
+    else if(pwm > this->max_pwm) {
+      this->pwm = max_pwm;
+      isStopped = false; 
+      digitalWrite(led, HIGH);
+    }
+    else {
+      this->pwm = pwm;
+      isStopped = false; 
+      digitalWrite(led, HIGH);
+    }
     analogWrite(this->en, this->pwm);  
+  }
+
+  void setMaxPWM(int max_pwm){
+    this->max_pwm = max_pwm;
+  }
+
+  void setVelocityParams(float a, float b, float dia){
+    // a and b for the linear relationship
+    // between rpm and pwm
+    this->a = a;
+    this->b = b;
+    this->dia = dia;
+  }
+  int velocityToPWM(float vel){
+    // Converts absolute velocity to PWM
+    // m/s -> rpm -> pwm
+    float r = (this->dia)/2;
+    float rpm = (abs(vel))/(r*0.10472);
+    int p = (int) (this->a)*rpm + (this->b);
+
+    if (p > this->max_pwm) return max_pwm;
+    else return p;
   }
 };

@@ -1,13 +1,9 @@
 /*  Jamiel Rahi
  *  Astro 2.0 Capstone Team 14
  *  2018-2019
- *  This is a driver that converts velocity
- *  commands (for each wheel) into PWM signals.
- *  The actual differential drive calculations
- *  are done elsewhere, i.e. decoupled from here. 
+ *
+ *  This program is for testing the motors without ROS.
  */
-
-
 
 #include "driver.h"
 #include "Motor.h"

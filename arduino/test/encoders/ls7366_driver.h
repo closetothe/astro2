@@ -29,26 +29,13 @@
 
 // Inclde the standard Arduino SPI Library, please ensure the SPI pins are
 // connected properly for your Arduino version
+
 #include <SPI.h>
-#include <Servo.h>
-#include <ros.h>
-#include <std_msgs/Int16.h>
-#include <std_srvs/Empty.h>
-
-ros::NodeHandle nh;
-std_msgs::Int16 left_ticks;
-std_msgs::Int16 right_ticks;
-ros::Publisher lpub("lwheel", &left_ticks);
-ros::Publisher rpub("rwheel", &right_ticks);
-
+#include "encoders.h"
 // Slave Select pins for encoders 1 and 2
 // Feel free to reallocate these pins to best suit your circuit
-const int slaveSelectEnc1 = 7;
-const int slaveSelectEnc2 = 8;
-
-// These hold the current encoder count.
-signed int encoderLcount = 0;
-signed int encoderRcount = 0;
+const int slaveSelectEnc1 = RIGHTENC;
+const int slaveSelectEnc2 = LEFTENC;
 
 void initEncoders() {
   
@@ -86,11 +73,11 @@ void initEncoders() {
   digitalWrite(slaveSelectEnc2,HIGH);       // Terminate SPI conversation 
 }
 
-int readEncoder(int encoder) {
+long readEncoder(int encoder) {
   
   // Initialize temporary variables for SPI read
   unsigned int count_1, count_2, count_3, count_4;
-  int count_value;  
+  long count_value;  
   
   // Read encoder 1
   if (encoder == 1) {
@@ -159,47 +146,4 @@ void clearEncoderCount() {
   digitalWrite(slaveSelectEnc2,LOW);      // Begin SPI conversation  
   SPI.transfer(0xE0);    
   digitalWrite(slaveSelectEnc2,HIGH);     // Terminate SPI conversation 
-}
-
-void clearEncoderCB(std_srvs::Empty::Request, std_srvs::Empty::Response)
-{
-  clearEncoderCount();
-}
-
-ros::ServiceServer<std_srvs::Empty::Request, 
-                   std_srvs::Empty::Response> server("reset_encoders",&clearEncoderCB);
-
-Servo servo;
-
-// // // //
-// BEGIN //
-// // // //
-
-void setup() {
- nh.initNode();
- nh.advertise(lpub);
- nh.advertise(rpub);
- nh.advertiseService(server);
- 
- initEncoders(); 
- clearEncoderCount();
-
- // Initialize servo
- servo.attach(4); 
- servo.write(90); 
-}
-
-void loop() {
- // Retrieve current encoder counters
- encoderLcount = readEncoder(1); 
- encoderRcount = readEncoder(2);
-
- left_ticks.data = encoderLcount;
- right_ticks.data = encoderRcount;
- 
- lpub.publish(&left_ticks);
- rpub.publish(&right_ticks);
- nh.spinOnce();
- 
- delay(30);
 }
