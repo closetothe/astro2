@@ -200,7 +200,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(astro_diff_drive src/astro_diff_drive.cpp)
-target_link_libraries(astro_diff_drive ${catkin_LIBRARIES})
-#add_dependencies(diff_drive beginner_tutorials_gencpp)
+add_executable(diff_drive src/diff_drive.cpp)
+target_link_libraries(diff_drive ${catkin_LIBRARIES})
 
