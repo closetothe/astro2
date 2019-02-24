@@ -1,9 +1,16 @@
 <launch>
 	<arg name="model"/>
-	<param name="robot_description" textfile="$(find astro_state_publisher)/urdf/robot.urdf" />
-	<param name="use_gui" value="$(arg gui)"/>
 
-"robo"    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
-		  	<param name="publish_frequency" value="100"/>
-		  </node>
+	<param name="robot_description" command="xacro --inorder '$(find astro_state_publisher)/urdf/proto3.urdf.xacro'" />
+
+	<rosparam command="load" file="$(find astro_state_publisher)/config/sources.yaml"/>
+
+	<node name="joint_state_publisher" pkg="astro_state_publisher" type="joint_state_publisher" output="screen">
+	</node>
+<!-- 	<node name="joint_state_test_publisher" pkg="astro_state_publisher" type="joint_state_test_publisher" >
+	</node> -->
+
+<!-- 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+		<param name="publish_frequency" value="100"/>
+	</node> -->
 </launch>

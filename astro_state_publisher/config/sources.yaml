@@ -1,0 +1,5 @@
+# params for the joint_state_publisher package
+# (only used in view_urdf.launch)
+rate: 100
+check_limits: false
+sources: [joints/camera, joints/lwheel]
