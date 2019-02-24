@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="astro_proto">
+
+	<!-- APPROXIMATIONS -->
+    <xacro:macro name="medium_inertial" params="m">
+        <inertial>
+                <mass value="${m}" />
+                <inertia ixx="0.003" ixy="0.0" ixz="0.0"
+                     iyy="0.003" iyz="0.0"
+                     izz="0.003" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="small_inertial" params="m">
+        <inertial>
+                <mass value="${m}" />
+                <inertia ixx="0.0005" ixy="0.0" ixz="0.0"
+                     iyy="0.0005" iyz="0.0"
+                     izz="0.0005" />
+        </inertial>
+    </xacro:macro>
+
+    <!-- BOX -->
+    <!-- mass depth width height -->
+    <xacro:macro name="inertial_box" params="m d w h">
+        <inertial>
+                <mass value="${m}" />
+                <inertia ixx="${0.08333333333*m*(h*h + d*d)}" ixy="0.0" ixz="0.0"
+                     	 iyy="${0.08333333333*m*(w*w + d*d)}" iyz="0.0"
+                     	 izz="${0.08333333333*m*(w*w + h*h)}" />
+        </inertial>
+    </xacro:macro>
+
+    <!-- CYLINDER -->
+    <!-- mass radius length -->
+    <xacro:macro name="inertial_cylinder" params="m r l">
+    	<xacro:property name="xxyy" value="${0.08333333333*m*(3*r*r + l*l)}"/>
+        <inertial>
+                <mass value="${m}" />
+                <inertia ixx="${xxyy}" ixy="0.0" ixz="0.0"
+                     	 iyy="${xxyy}" iyz="0.0"
+                     	 izz="${0.08333333333*m*r*r}" />
+        </inertial>
+    </xacro:macro>
+</robot>

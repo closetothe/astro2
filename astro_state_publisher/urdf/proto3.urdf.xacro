@@ -1,0 +1,483 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="astro2">
+
+  <xacro:include filename="$(find astro_state_publisher)/urdf/inertial.urdf.xacro"/>
+  <xacro:include filename="$(find realsense2_camera)/urdf/_d415.urdf.xacro"/>
+
+  <!-- Colours -->
+  <material name="blue">
+    <color rgba="0 0 0.7 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="silver">
+    <color rgba="0.9 0.9 0.9 1"/>
+  </material>
+  <material name="iron">
+    <color rgba="0.6 0.6 0.6 1"/>
+  </material>
+  <material name="brown">
+    <color rgba="0.87 0.72 0.53 1"/>
+  </material>
+
+  <!-- BASE LINK -->
+  <xacro:property name="base_h" value="0.780" />
+  <xacro:property name="base_w" value="0.470" />
+  <xacro:property name="base_d" value="0.760" />
+  <xacro:property name="base_mass" value="40" />
+
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${base_d} ${base_w} ${base_h}"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${base_d} ${base_w} ${base_h}"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_box m="${base_mass}" d="${base_d}" w="${base_w}" h="${base_h}"/>
+  </link>
+
+  <!-- CAMERA LINKS -->
+  <xacro:property name="cam_sup_len" value="0.130" />
+  <xacro:property name="cam_sup_rad" value="0.016" />
+  <xacro:property name="cam_sup_mass" value="0.2" />
+
+  <link name="camera_support_link">
+    <visual>
+      <geometry>
+        <cylinder length="${cam_sup_len}" radius="${cam_sup_rad}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${cam_sup_len/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${cam_sup_len}" radius="${cam_sup_rad}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${cam_sup_len/2}"/>
+    </collision>
+    <xacro:medium_inertial m="${cam_sup_mass}"/>
+  </link>
+
+  <joint name="camera_support_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_support_link"/>
+    <origin xyz="0 0 ${base_h/2}"/>
+  </joint>
+
+  <xacro:property name="cam_serv_h" value="0.0258" />
+  <xacro:property name="cam_serv_w" value="0.04" />
+  <xacro:property name="cam_serv_d" value="0.02" />
+  <xacro:property name="cam_serv_mass" value="0.05" />
+
+  <link name="camera_servo_link">
+    <visual>
+      <geometry>
+        <box size="${cam_serv_d} ${cam_serv_w} ${cam_serv_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${cam_serv_h/2}"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${cam_serv_d} ${cam_serv_w} ${cam_serv_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${cam_serv_h/2}"/>      
+    </collision>
+    <xacro:small_inertial m="${cam_serv_mass}"/>
+  </link>
+
+  <joint name="camera_servo_joint" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="camera_support_link"/>
+    <child link="camera_servo_link"/>
+    <origin xyz="0 0 ${cam_sup_len}"/>
+  </joint>
+
+  <!-- CAMERA -->
+  <xacro:sensor_d415 parent="camera_servo_link">
+    <origin rpy="0 0 0" xyz="0 0 ${cam_serv_h}"/>
+  </xacro:sensor_d415>
+
+
+  <!-- DRIVING WHEELS -->
+  <xacro:property name="suspension_h" value="0.05715" />
+  <xacro:property name="suspension_w" value="0.0889" />
+  <xacro:property name="suspension_d" value="0.0889" />
+  <xacro:property name="suspension_mass" value="1.5" />
+
+  <xacro:macro name="susp_inertia">
+    <xacro:inertial_box m="${suspension_mass}" d="${suspension_d}" w="${suspension_w}" h="${suspension_h}"/>
+  </xacro:macro>
+
+  <joint name="left_susp_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_susp_link"/>
+    <origin xyz="0 ${(base_w/2) - (suspension_w/2)} ${(-1)*base_h/2}"/>
+  </joint>
+
+  <link name="left_susp_link">
+    <visual>
+      <geometry>
+        <box size="${suspension_d} ${suspension_w} ${suspension_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${(-1)*suspension_h/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${suspension_d} ${suspension_w} ${suspension_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${(-1)*suspension_h/2}"/>      
+    </collision>
+    <xacro:susp_inertia/>
+  </link>
+
+  <joint name="right_susp_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_susp_link"/>
+    <origin xyz="0 ${-(base_w/2) + (suspension_w/2)} ${(-1)*base_h/2}"/>
+  </joint>
+
+  <link name="right_susp_link">
+    <visual>
+      <geometry>
+        <box size="${suspension_d} ${suspension_w} ${suspension_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${(-1)*suspension_h/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${suspension_d} ${suspension_w} ${suspension_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${(-1)*suspension_h/2}"/>
+    </collision>
+    <xacro:susp_inertia/>
+  </link>
+
+  <!-- Amount the wheels are sticking out from the chassis -->
+  <xacro:property name="wheel_offset" value="0.01" />
+
+  <xacro:property name="motor_rad" value="0.01905" />
+  <xacro:property name="motor_len" value="${suspension_w + wheel_offset}" />
+  <xacro:property name="motor_mass" value="1.0" />
+
+  <xacro:macro name="motor_inertia">
+    <xacro:inertial_cylinder m="${motor_mass}" r="${motor_rad}" l="${motor_len}"/>
+  </xacro:macro>
+
+  <joint name="left_motor_joint" type="fixed">
+    <parent link="left_susp_link"/>
+    <child link="left_motor_link"/>
+    <origin xyz="0 ${wheel_offset/2} ${-suspension_h}"/>
+  </joint>
+
+  <link name="left_motor_link">
+    <visual>
+      <geometry>
+        <cylinder length="${motor_len}" radius="${motor_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 0 ${-motor_rad}"/>
+      <material name="iron"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${motor_len}" radius="${motor_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 0 ${-motor_rad}"/>      
+    </collision>
+    <xacro:motor_inertia/>
+  </link>
+
+  <joint name="right_motor_joint" type="fixed">
+    <parent link="right_susp_link"/>
+    <child link="right_motor_link"/>
+    <origin xyz="0 ${-wheel_offset/2} ${-suspension_h}"/>
+  </joint>
+
+  <link name="right_motor_link">
+    <visual>
+      <geometry>
+        <cylinder length="${motor_len}" radius="${motor_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 ${-motor_rad}"/>
+      <material name="iron"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${motor_len}" radius="${motor_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 ${-motor_rad}"/>
+    </collision>
+    <xacro:motor_inertia/>
+  </link>
+
+  <xacro:property name="wheel_rad" value="0.0762" />
+  <xacro:property name="wheel_len" value="0.0254" />
+  <xacro:property name="wheel_mass" value="0.3" />
+
+  <xacro:macro name="wheel_inertia">
+    <xacro:inertial_cylinder m="${wheel_mass}" r="${wheel_rad}" l="${wheel_len}"/>
+  </xacro:macro>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="left_motor_link"/>
+    <child link="left_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0 ${motor_len/2} ${-motor_rad}"/>
+  </joint>
+
+  <link name="left_wheel_link">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 ${wheel_len/2} 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 ${wheel_len/2} 0"/>
+    </collision>
+    <xacro:wheel_inertia/>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="right_motor_link"/>
+    <child link="right_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0 ${-motor_len/2} ${-motor_rad}"/>
+  </joint>
+
+  <link name="right_wheel_link">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 ${-wheel_len/2} 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_len}" radius="${wheel_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 ${-wheel_len/2} 0"/>
+    </collision>
+    <xacro:wheel_inertia/>
+  </link>
+
+  <!-- CASTERS -->
+  <xacro:property name="caster_support_h" value="0.0635" />
+  <xacro:property name="caster_support_w" value="0.05" />
+  <xacro:property name="caster_support_d" value="0.05" />
+  <xacro:property name="caster_support_mass" value="1.0" />
+
+  <xacro:property name="caster_wheel_rad" value="0.04445" />
+  <xacro:property name="caster_wheel_len" value="0.0254" />
+  <xacro:property name="caster_wheel_mass" value="0.2" />
+
+  <xacro:macro name="caster_wheel_inertia">
+    <xacro:inertial_cylinder m="${caster_wheel_mass}" r="${caster_wheel_rad}" l="${caster_wheel_len}"/>
+  </xacro:macro>
+
+
+  <!-- front right -->
+  <joint name="caster_sup_front_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_sup_front_right_link"/>
+    <origin rpy="0 0 0" xyz="${base_d/2 - caster_support_d/2} ${-base_w/2 + caster_support_w/2} ${-base_h/2}"/>
+  </joint>
+
+  <link name="caster_sup_front_right_link">
+    <visual>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>
+    </collision>
+    <xacro:medium_inertial m="${caster_support_mass}"/>
+  </link>
+
+  <joint name="caster_wheel_front_right_joint" type="fixed">
+    <parent link="caster_sup_front_right_link"/>
+    <child link="caster_wheel_front_right_link"/>
+    <origin rpy="0 0 0" xyz="${-caster_support_d/2} 0 ${-caster_support_h-caster_wheel_rad}"/>
+  </joint>
+
+  <link name="caster_wheel_front_right_link">
+    <visual>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 0"/>      
+    </collision>
+    <xacro:caster_wheel_inertia/>
+  </link>
+
+
+  <!-- front left -->
+  <joint name="caster_sup_front_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_sup_front_left_link"/>
+    <origin rpy="0 0 0" xyz="${base_d/2 - caster_support_d/2} ${base_w/2 - caster_support_w/2} ${-base_h/2}"/>
+  </joint>
+
+  <link name="caster_sup_front_left_link">
+    <visual>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>      
+    </collision>
+    <xacro:medium_inertial m="${caster_support_mass}"/>
+  </link>
+
+  <joint name="caster_wheel_front_left_joint" type="fixed">
+    <parent link="caster_sup_front_left_link"/>
+    <child link="caster_wheel_front_left_link"/>
+    <origin rpy="0 0 0" xyz="${-caster_support_d/2} 0 ${-caster_support_h-caster_wheel_rad}"/>
+  </joint>
+
+  <link name="caster_wheel_front_left_link">
+    <visual>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 0 0"/>      
+    </collision>
+    <xacro:caster_wheel_inertia/>
+  </link>
+
+  <!-- back left -->
+  <joint name="caster_sup_back_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_sup_back_left_link"/>
+    <origin rpy="0 0 0" xyz="${-base_d/2 + caster_support_d/2} ${base_w/2 - caster_support_w/2} ${-base_h/2}"/>
+  </joint>
+
+  <link name="caster_sup_back_left_link">
+    <visual>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>      
+    </collision>
+    <xacro:medium_inertial m="${caster_support_mass}"/>
+  </link>
+
+  <joint name="caster_wheel_back_left_joint" type="fixed">
+    <parent link="caster_sup_back_left_link"/>
+    <child link="caster_wheel_back_left_link"/>
+    <origin rpy="0 0 0" xyz="${-caster_support_d/2} 0 ${-caster_support_h-caster_wheel_rad}"/>
+  </joint>
+
+  <link name="caster_wheel_back_left_link">
+    <visual>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 0" xyz="0 0 0"/>      
+    </collision>
+    <xacro:caster_wheel_inertia/>
+  </link>
+
+  <!-- back right -->
+  <joint name="caster_sup_back_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_sup_back_right_link"/>
+    <origin rpy="0 0 0" xyz="${-base_d/2 + caster_support_d/2} ${-base_w/2 + caster_support_w/2} ${-base_h/2}"/>
+  </joint>
+
+  <link name="caster_sup_back_right_link">
+    <visual>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${caster_support_d} ${caster_support_w} ${caster_support_h}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${-caster_support_h/2}"/>      
+    </collision>
+    <xacro:medium_inertial m="${caster_support_mass}"/>
+  </link>
+
+  <joint name="caster_wheel_back_right_joint" type="fixed">
+    <parent link="caster_sup_back_right_link"/>
+    <child link="caster_wheel_back_right_link"/>
+    <origin rpy="0 0 0" xyz="${-caster_support_d/2} 0 ${-caster_support_h-caster_wheel_rad}"/>
+  </joint>
+
+  <link name="caster_wheel_back_right_link">
+    <visual>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${caster_wheel_len}" radius="${caster_wheel_rad}"/>
+      </geometry>
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 0"/>      
+    </collision>
+    <xacro:caster_wheel_inertia/>
+  </link>
+  
+</robot>
