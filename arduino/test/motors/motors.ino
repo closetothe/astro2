@@ -12,56 +12,15 @@
 Motor right = Motor(ENA, IN1, IN2, 0);
 Motor left = Motor(ENB, IN3, IN4, 0);
 
-void left_cmd(float cmd){
-  // cmd is in m/s
-  
-  if(abs(cmd) >= VMIN){
-    
-    // Experimental relationship between velocity and pwm
-    int pwm;
-    if (abs(cmd) > VMAX) pwm = 255;
-    // TODO: UPDATE EQUATION
-    else pwm = (int)(830.87*abs(cmd) - 25.617);
-    
-    if (cmd > 0) left.forward();
-    else left.reverse();
-
-    left.setSpeed(pwm);    
-  }
-  else{
-    left.stop();
-  }
-}
-
-void right_cmd(float cmd){
-  // cmd is in m/s
-  
-  if(abs(cmd) >= VMIN){
-    
-    // Experimental relationship between velocity and pwm
-    int pwm;
-    if (abs(cmd) > VMAX) pwm = 250;
-    else pwm = (int)(830.87*abs(cmd) - 20.617);
-    
-    if (cmd > 0) right.forward();
-    else right.reverse();
-
-    right.setSpeed(pwm);    
-  }
-  else{
-    right.stop();
-  }
-} 
-
-unsigned char lpwm = 255;
-unsigned char rpwm = 255;
+unsigned char lpwm = 125;
+unsigned char rpwm = 125;
 
 void setup()
 {
   right.init();
   left.init();
-  left.reverse();
-  right.reverse();
+  left.forward();
+  right.forward();
   left.setSpeed(lpwm); 
   right.setSpeed(rpwm); 
 }

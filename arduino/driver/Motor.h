@@ -85,12 +85,15 @@ class Motor{
   }
   int velocityToPWM(float vel){
     // Converts absolute velocity to PWM
-    // m/s -> rpm -> pwm
-    float r = (this->dia)/2;
-    float rpm = (abs(vel))/(r*0.10472);
-    int p = (int) (this->a)*rpm + (this->b);
-
+    // m/s -> pwm
+    int p = (int) (this->a)*vel + (this->b);
     if (p > this->max_pwm) return max_pwm;
     else return p;
+  }
+  float velocityToRPM(float vel){
+    // Converts absolute velocity to RPM
+    // m/s -> rpm 
+    float r = (this->dia)/2;
+    return (abs(vel))/(r*0.10472);
   }
 };

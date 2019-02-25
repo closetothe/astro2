@@ -53,13 +53,19 @@ private:
 	std::vector<boost::shared_ptr<urdf::Joint> > joints_;
 	ros::Publisher joint_state_pub_;
 	sensor_msgs::JointState js_;
-	bool check_limits_ = false;
+	bool check_limits_;
+	bool zero_positions_;
+	bool zero_velocities_;
+	bool zero_efforts_;
 	std::string urdf_;
 	urdf::Model model_;
 
 	bool getParams(){
 		// Get params
 		nh_.param("rate", pub_rate, 10);
+		nh_.param("zero_positions", zero_positions_, false);
+		nh_.param("zero_velocities", zero_velocities_, false);
+		nh_.param("zero_efforts", zero_efforts_, false);
 
 		if(nh_.getParam("sources", sources_)){
 			if(sources_.empty()){
@@ -179,6 +185,12 @@ private:
 			if(t != 6 && t != 0){
 				js_.name.push_back(jnt.second->name);
 				joints_.push_back(jnt.second);
+				if(zero_positions_)
+					js_.position.push_back(0);
+				if(zero_velocities_)
+					js_.velocity.push_back(0);
+				if(zero_efforts_)
+					js_.effort.push_back(0);
 			}
 		}
 

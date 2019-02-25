@@ -37,7 +37,7 @@ void left_cb(const std_msgs::Float32& cmd){
     // Experimental relationship between velocity and pwm
     int pwm;
 
-    if (abs(cmd.data) < VMAX) pwm = left.velocityToPWM((float)cmd.data);
+    if (abs(cmd.data) < VMAX) pwm = left.velocityToPWM((float)abs(cmd.data));
     else pwm = left.velocityToPWM(VMAX);
     
     if (cmd.data > 0) left.forward();
@@ -58,7 +58,7 @@ void right_cb(const std_msgs::Float32& cmd){
     // Experimental relationship between velocity and pwm
     // Right motor moves a little faster
     int pwm;
-    if (abs(cmd.data) < VMAX) pwm = right.velocityToPWM((float)cmd.data);
+    if (abs(cmd.data) < VMAX) pwm = right.velocityToPWM((float)abs(cmd.data));
     else pwm = right.velocityToPWM(VMAX);
 
     if (cmd.data > 0) right.forward();
@@ -86,8 +86,11 @@ void setup()
   left.init();
   pinMode(LED_LEFT, OUTPUT);
   pinMode(LED_RIGHT, OUTPUT);
+  nh.getHardware()->setBaud(115200);
   nh.initNode();
+  delay(500);
   nh.subscribe(left_motor_sub);
+  delay(500);
   nh.subscribe(right_motor_sub);
 }
 

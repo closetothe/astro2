@@ -10,7 +10,8 @@
 <!-- 	<node name="joint_state_test_publisher" pkg="astro_state_publisher" type="joint_state_test_publisher" >
 	</node> -->
 
-<!-- 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
 		<param name="publish_frequency" value="100"/>
-	</node> -->
+	</node>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find astro_state_publisher)/urdf.rviz" />
 </launch>

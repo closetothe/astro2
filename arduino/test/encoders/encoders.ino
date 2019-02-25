@@ -15,8 +15,9 @@ signed long encoderLcount = 0;
 unsigned int t, t_prev;
 long c_left, c_left_prev;
 long c_right, c_right_prev;
-float vel_left_prev;
-float vel_right_prev;
+double vel_left_prev;
+double vel_right_prev;
+double r = 3*25.4/1000; // radius in meters
 
 void setup() {
  Serial.begin(9600);
@@ -41,11 +42,11 @@ void loop() {
  c_right = encoderRcount;
  t = millis();
 
- float dt = (t - t_prev)/1000.0;
- float dc_right = c_right - c_right_prev;
- float dc_left = c_left - c_left_prev;
- float vel_right = 0;
- float vel_left = 0;
+ double dt = (t - t_prev)/1000.0;
+ double dc_right = c_right - c_right_prev;
+ double dc_left = c_left - c_left_prev;
+ double vel_right = 0;
+ double vel_left = 0;
 
  if (dt > 0.001 && abs(dc_left) > 0)
   vel_left = (2*PI*dc_left)/(LCPR*dt);
@@ -61,16 +62,17 @@ void loop() {
  if (abs(vel_right-vel_right_prev) > 100)
   vel_right = vel_right_prev;
 
-
- float rpm_left = (60*vel_left)/(2*PI);
- float rpm_right = (60*vel_right)/(2*PI);
- Serial.print("LEFT RPM: "); Serial.print(rpm_left); 
- Serial.print("  RIGHT RPM: "); Serial.println(rpm_right);
+ double rpm_left = (60*vel_left)/(2*PI);
+ double rpm_right = (60*vel_right)/(2*PI);
+ Serial.print("LEFT: "); Serial.print(vel_left, 6); 
+ Serial.print("  RIGHT: "); Serial.print(vel_right, 6);
+ Serial.print("  LEFT v: "); Serial.print(vel_left*r, 8); 
+ Serial.print("  RIGHT v: "); Serial.println(vel_right*r, 8);
 
  t_prev = t;
  c_left_prev = c_left;
  c_right_prev = c_right;
  vel_left_prev = vel_left;
  vel_right_prev = vel_right;
- delay(200);
+ delay(300);
 }

@@ -18,23 +18,23 @@
 
 // Min and max velocity
 // (in m/s)
-#define VMIN 0.0
-#define VMAX 0.5
+#define VMIN 0.00
+#define VMAX 0.33
 
 // PWM (i.e. voltage) limit
-#define RLIMIT 200
-#define LLIMIT 200
+#define RLIMIT 125
+#define LLIMIT 125
 
 // Experimental coefficients
-// pwm = a*(rpm) + b
-#define RIGHTA 800
-#define RIGHTB -27.8
-#define LEFTA 800
-#define LEFTB -27.8
+// pwm = a*(v) + b
+#define RIGHTA 355.41
+#define RIGHTB 11.987
+#define LEFTA 364.9
+#define LEFTB 10.571
 
 // Motor deadbands
-#define LEFTDB 30
-#define RIGHTDB 30
+#define LEFTDB 40
+#define RIGHTDB 40
 
 // Wheel diameters
 // (in meters)
