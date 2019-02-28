@@ -11,7 +11,7 @@
   <node pkg="astro_diff_drive" type="diff_drive" name="diff_drive" output="screen">
 	  <rosparam param="base_width">0.5408</rosparam>
   </node>
-  <node pkg="differential_drive" type="diff_tf.py" name="diff_odom_tf" output="screen">
-    <rosparam param="base_width">0.5408</rosparam>
+  <node pkg="astro_diff_drive" type="diff_tf.py" name="diff_drive_odom" output="screen">
+    <rosparam command="load" file="$(find astro_diff_drive)/config/diff_tf.yaml"/>
   </node>
 </launch>
