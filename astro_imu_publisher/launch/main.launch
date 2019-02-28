@@ -1,0 +1,10 @@
+<launch>
+
+  <include file="$(find astro_imu_publisher)/launch/driver.launch" />
+
+  <node name="imu_publisher" pkg="astro_imu_publisher" type="astro_imu_publisher.py" output="screen">
+    <param name="rate" value="50"/>
+    <rosparam command="load" file="$(find astro_imu_publisher)/config/covariance.yaml"/>
+  </node>
+  
+</launch>

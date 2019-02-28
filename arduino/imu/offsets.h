@@ -1,0 +1,24 @@
+// Calibration data
+
+#define ARL 232
+#define ARM 3
+#define MRL 108
+#define MRM 3
+#define AOXL 239
+#define AOXM 255
+#define AOYL 12
+#define AOYM 0
+#define AOZL 235
+#define AOZM 255
+#define MOXL 86
+#define MOXM 0
+#define MOYL 241
+#define MOYM 255
+#define MOZL 64
+#define MOZM 0
+#define GOXL 254
+#define GOXM 255
+#define GOYL 254
+#define GOYM 255
+#define GOZL 0
+#define GOZM 0
