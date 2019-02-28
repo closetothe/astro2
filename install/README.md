@@ -1,4 +1,4 @@
-## Installation instructions
+## ASTRO 2 Installation Instructions
 ##### (Requires Ubuntu 16.04)
 
 The ASTRO 2 robot uses both an ODROID XU4 (armhf) and a MacBook Pro running Ubuntu 16.04 (amd64). Installation scripts that work in both environments are in this folder, and the rest are separated in their respective folders.

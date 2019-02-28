@@ -1,4 +1,4 @@
-# Astro 2 Arduino Sketches
+# ASTRO 2 Arduino Sketches
 ### Prototype v0.3 (Large Robot)
 
 These Arduino programs implement details that are specific to our hardware.

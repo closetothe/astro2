@@ -1,4 +1,4 @@
-# Astro Differential Drive
+# ASTRO 2 Differential Drive
 
 This is a simple package that implements an open-loop diff drive. 
 
