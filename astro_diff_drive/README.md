@@ -24,15 +24,15 @@ The launch file runs:
 
 ## diff_drive node
 
+### Subscribed topics
+`cmd_vel` - ([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))  
+    Standard velocity command. Only linear.x and angular.z are used.
+
 ### Published topics
-`cmd_vel/left` - (std_msgs/Float32)
+`cmd_vel/left` - ([std_msgs/Float32](http://docs.ros.org/jade/api/std_msgs/html/msg/Float32.html))  
     Left velocity in m/s
 
-`cmd_vel/right` - (std_msgs/Float32)
+`cmd_vel/right` - ([std_msgs/Float32](http://docs.ros.org/jade/api/std_msgs/html/msg/Float32.html))  
     Right velocity in m/s
-
-### Subscribed topics
-`cmd_vel` - (geometry_msgs/Twist)
-    Standard velocity command. Only linear.x and angular.z are used.
 
 See documentation of `differential_drive` for publishers/subscribers provided by `diff_tf.py`.

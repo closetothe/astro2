@@ -7,7 +7,8 @@
 
 	<node name="joint_state_publisher" pkg="astro_state_publisher" type="joint_state_publisher" output="screen">
 	</node>
-<!-- 	<node name="joint_state_test_publisher" pkg="astro_state_publisher" type="joint_state_test_publisher" >
+
+	<!-- <node name="joint_state_test_publisher" pkg="astro_state_publisher" type="joint_state_test_publisher" >
 	</node> -->
 
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
