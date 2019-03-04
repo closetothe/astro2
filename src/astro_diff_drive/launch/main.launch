@@ -1,0 +1,16 @@
+<launch>
+  <include file="$(find astro_diff_drive)/launch/drivers.launch" />
+
+  <node pkg="astro_diff_drive" type="diff_drive" name="diff_drive" output="screen">
+	  <param name="base_width" type="double" value="0.5408"/>
+  </node>
+
+<!--   <node pkg="astro_diff_drive" type="diff_tf.py" name="diff_drive_odom" output="screen">
+    <rosparam command="load" file="$(find astro_diff_drive)/config/diff_tf.yaml"/>
+  </node> -->
+
+  <node pkg="astro_diff_drive" type="diff_odom" name="diff_drive_odom_publisher" output="screen">
+    <rosparam command="load" file="$(find astro_diff_drive)/config/odom_config.yaml"/>
+  </node>
+
+</launch>

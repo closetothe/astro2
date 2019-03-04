@@ -39,28 +39,39 @@ ros::NodeHandle nh;
 
 // To do hardware limitations, all the IMU measurement
 // data will be crammed into a single float32 array.
-// [ quat_x, quat_y, quat_z, quat_w, 
-//   euler_x, euler_y, euler_z, 
+// [ quat_w, quat_x, quat_y, quat_z,
 //   accel_x, accel_y, accel_z, 
 //   gyro_x, gyro_y, gyro_z, 
+//   temperature
+//   euler_x, euler_y, euler_z, 
+//   mag_x, mag_y, mag_z
 //   sys_cal, accel_cal, gyro_cal, mag_cal, 
-//   temperature ]
+//    ]
 std_msgs::Float32MultiArray float_msg;
 
+// Auxiliary data will be stored in a byte array
+// [sys_cal, accel_cal, gyro_cal, mag_cal, temperature]
+// std_msgs::ByteMultiArray byte_msg;
+
+// Create publishers
 ros::Publisher float_pub("imu/raw", &float_msg);
+// ros::Publisher byte_pub("imu/raw/bytes", &byte_msg);
 
 void setup(void) 
 {  
   nh.getHardware()->setBaud(115200);
   nh.initNode();
-  delay(100);
+  delay(500);
   nh.advertise(float_pub); 
   delay(100);
+  // nh.advertise(byte_pub);
+  // delay(100);
   
 
   float_msg.data_length = 21;
-
-  // Initialize sensor
+  // byte_msg.data_length = 5;
+  
+  /* Initialise the sensor */
   if(!bno.begin())
   {
     /* There was a problem detecting the BNO055 ... check your connections */
@@ -69,7 +80,7 @@ void setup(void)
   }
   
   setCal(); // Set Calibration Values
-  delay(500);
+  delay(1000);
   bno.setExtCrystalUse(true); 
 }
 
@@ -78,15 +89,21 @@ byte i = 0;
 void loop(void) 
 {
   // First bunch of data is 0s
-  if (i > 100){
+  if (i > 20){
   // Stores calibration and temperature data
-  byte byte_array[5] = {0,0,0,0, 25};
+  byte temp = 25;
+  byte byte_array[4] = {0,0,0,0};
+  // Get calibration data
   getCalStatus(byte_array);
-  byte_array[4] = bno.getTemp();
+  // // Get temperature
+  temp = bno.getTemp();
+  // // Update msg pointer
+  // byte_msg.data = byte_array;
 
-  // Get main IMU data
+
+  // Stores main IMU data
   float float_array[21];
-
+  // Get imu data
   imu::Quaternion quat = bno.getQuat();
 
   float_array[0] = quat.w();
@@ -96,38 +113,40 @@ void loop(void)
 
   imu::Vector<3> vec = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
 
+  vec = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+
   float_array[4] = vec.x();
   float_array[5] = vec.y();
   float_array[6] = vec.z();
 
-  vec = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  vec = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
 
   float_array[7] = vec.x();
   float_array[8] = vec.y();
   float_array[9] = vec.z();
+  float_array[10] = (float) temp;
 
-  vec = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
-
-  float_array[10] = vec.x();
-  float_array[11] = vec.y();
-  float_array[12] = vec.z();
+  // Euler is in the wrong coordinate frame
+  float_array[11] = -vec.z();
+  float_array[12] = -vec.y();
+  float_array[13] = 360-vec.x();
 
   vec = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER);
 
-  float_array[13] = vec.x();
-  float_array[14] = vec.y();
-  float_array[15] = vec.z();
+  float_array[14] = vec.x();
+  float_array[15] = vec.y();
+  float_array[16] = vec.z();
 
-  float_array[16] = (float) byte_array[0];
-  float_array[17] = (float) byte_array[1];
-  float_array[18] = (float) byte_array[2];
-  float_array[19] = (float) byte_array[3];
-  float_array[20] = (float) byte_array[4];
+  float_array[17] = (float) byte_array[0];
+  float_array[18] = (float) byte_array[1];
+  float_array[19] = (float) byte_array[2];
+  float_array[20] = (float) byte_array[3];
 
   // Update msg pointer
   float_msg.data = float_array;
 
   // Publish
+  // byte_pub.publish(&byte_msg);
   float_pub.publish(&float_msg);
 
   nh.spinOnce();  

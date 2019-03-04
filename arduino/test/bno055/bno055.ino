@@ -80,24 +80,25 @@ void loop(void)
   imu::Vector<3> gyro = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
   imu::Vector<3> mag = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER);
   imu::Quaternion quat = bno.getQuat();
-  /* Display the floating point data */
-  Serial.print("X: ");
-  Serial.print(euler.x(), 4);
-  Serial.print("\tY: ");
-  Serial.print(euler.y(), 4);
-  Serial.print("\tZ: ");
-  Serial.print(euler.z(), 4);
-  Serial.println("");
-
+  
+  // Corrected Euler frame into x: forward, y:left, z: up.
 //  Serial.print("X: ");
-//  Serial.print(quat.x(), 4);
+//  Serial.print(360 - euler.x(), 4);
 //  Serial.print("\tY: ");
-//  Serial.print(quat.y(), 4);
+//  Serial.print(-euler.y(), 4);
 //  Serial.print("\tZ: ");
-//  Serial.print(quat.z(), 4);
-//  Serial.print("\tW: ");
-//  Serial.print(quat.w(), 4);
+//  Serial.print(-euler.z(), 4);
 //  Serial.println("");
+
+  Serial.print("X: ");
+  Serial.print(quat.x(), 4);
+  Serial.print("\tY: ");
+  Serial.print(quat.y(), 4);
+  Serial.print("\tZ: ");
+  Serial.print(quat.z(), 4);
+  Serial.print("\tW: ");
+  Serial.print(quat.w(), 4);
+  Serial.println("");
   
   delay(BNO055_SAMPLERATE_DELAY_MS);
   

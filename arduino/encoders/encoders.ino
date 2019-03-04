@@ -8,11 +8,9 @@
  *  from two LS7366R devices using a
  *  driver written by Jason Traud.
  *
- *  It publishes encoder ticks to /lwheel and /rwheel.
- *
- *  It also calculates the angular velocites of the wheels
- *  and publishes them to /joints/lwheel/vel and /joints/rwheel/vel
- *  to be collected by the astro_state_publisher
+ *  It calculates the angular velocites of the wheels
+ *  and publishes them as joint states to /joints/wheels
+ *  to be collected by the astro_state_publisher and diff_twist nodes.
  *
  *  ALL HARDWARE-SPECIFIC PARAMETERS ARE IN:
  *  "encoders.h"
@@ -20,7 +18,6 @@
 
 
 #include <ros.h>
-#include <std_msgs/Int16.h>
 #include <sensor_msgs/JointState.h>
 
 #include "encoders.h"
@@ -33,12 +30,6 @@ float vel_left_prev;
 float vel_right_prev;
 
 ros::NodeHandle nh;
-
-// Encoder count publishers
-std_msgs::Int16 left_ticks;
-std_msgs::Int16 right_ticks;
-ros::Publisher left_count_pub("lwheel", &left_ticks);
-ros::Publisher right_count_pub("rwheel", &right_ticks);
 
 // Joint velocity publisher
 // (publishes left and right wheel velocities as one msg)
@@ -64,15 +55,11 @@ void setup() {
  nh.getHardware()->setBaud(115200);
  nh.initNode();
  delay(500);
- 
- // Counters
- nh.advertise(left_count_pub);
- delay(500);
- nh.advertise(right_count_pub);
- delay(500);
+
  // Joint states
  nh.advertise(wheel_joint_pub);
  delay(100);
+
  initEncoders(); 
  clearEncoderCount();
 }
@@ -81,10 +68,6 @@ void loop() {
  // Retrieve current encoder counters
  encoderLcount = readEncoder(1); 
  encoderRcount = readEncoder(2);
-
- // Fill counter messages
- left_ticks.data = encoderLcount;
- right_ticks.data = encoderRcount;
 
  // // // // // // // // // // // // //
  //   CALCULATE ANGULAR VELOCITIES   //
@@ -120,14 +103,7 @@ void loop() {
  // Fill joint vel messages
  wheel_joints.velocity[0] = vel_left;
  wheel_joints.velocity[1] = vel_right;
- //char result[8]; // Buffer big enough for 7-character float
- //char * log_msg;
- //dtostrf(wheel_joints.velocity[0], 6, 2, result); // Leave room for too large numbers!
- //sprintf(log_msg,"points[0].positions[0] =%s", result);
- //nh.loginfo(log_msg);
- // Publish encoder counts
- left_count_pub.publish(&left_ticks);
- right_count_pub.publish(&right_ticks);
+
  // Publish joint states
  wheel_joint_pub.publish(&wheel_joints); 
  nh.spinOnce();
@@ -139,5 +115,5 @@ void loop() {
  vel_left_prev = vel_left;
  vel_right_prev = vel_right;
 
- delay(100);
+ delay(50);
 }

@@ -1,3 +1,20 @@
+/*  Jamiel Rahi
+ *  Astro 2.0 Capstone Team 14
+ *  2018-2019
+ *  -------------------------
+ *  ---- WRITE TO MOTORS ----
+ *  -------------------------
+ *  This is a driver that converts velocity
+ *  commands (for each wheel) into PWM signals.
+ *
+ *  It subscribes to left and right velocity commands
+ *  from astro_diff_drive and uses an experimentally-determined
+ *  linear relationship to calculate the desired PWM.
+ *
+ *  ALL HARDWARE SPECIFIC PARAMETERS ARE IN:
+ *  "driver.h"
+ */
+
 class Motor{
   private:
   int en, in1, in2;

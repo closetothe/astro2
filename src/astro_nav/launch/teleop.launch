@@ -1,0 +1,5 @@
+<launch>
+	<include file="$(find astro_diff_drive)/launch/main.launch" />
+	<include file="$(find astro_state_publisher)/launch/main.launch" />	
+	<include file="$(find teleop_twist_joy)/launch/teleop.launch" />	
+</launch>

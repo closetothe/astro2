@@ -1,6 +1,0 @@
-rate: 50
-base_width: 0.5408
-odom_frame_id: "odom_wheels"
-# enable_tf: false
-pose_covariance_diagonals: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
-twist_covariance_diagonals: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]

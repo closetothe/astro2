@@ -1,0 +1,23 @@
+<launch>
+	<include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="align_depth" value="true"/>
+    </include>
+
+	<node name="visual_odometry" pkg="rtabmap_ros" type="rgbd_odometry" args="" output="screen">
+        <param name="publish_tf" value="false"/>
+		<remap from="odom" to="camera/odom"/>
+		<remap from="rgb/image" to="camera/color/image_raw"/>
+		<remap from="rgb/camera_info" to="camera/color/camera_info"/>
+		<remap from="depth/image" to="camera/depth/image_rect_raw"/>
+    	<rosparam command="load" file="$(find astro_vision)/config/rtabmap_odom.yaml"/>
+    	<param name="OdomF2M/MaxSize" type="string" value="1000"/> 
+    	<param name="Vis/MaxFeatures" type="string" value="600"/>
+    	<param name="GFTT/MinDistance" type="string" value="10"/>
+    	<param name="Odom/Strategy" value="1"/>
+    	<param name="Odom/GuessMotion" value="false"/>
+    	<param name="Vis/CorType" value="1"/>
+    	<param name="Vis/EstimationType" value="1"/>
+    	<param name="Odom/ResetCountdown" value="1" />
+        <param name="Vis/MaxDepth" type="string" value="6.0"/>
+  	</node>
+</launch>

@@ -1,0 +1,4 @@
+odom_frame_id: "odom"
+wait_for_tf: true
+publish_tf: false
+publish_null_when_lost: true

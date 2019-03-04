@@ -1,0 +1,20 @@
+<launch>
+	<remap from="/odom_info" to="/rtabmap/odom_info"/>  
+    <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+        <arg name="rtabmap_args" value="--delete_db_on_start"/>
+        <arg name="localization" value="false"/>
+        <arg name="rviz" value="false"/>
+        <arg name="rtabmapviz" value="true"/>
+        <arg name="depth_topic" value="/camera/aligned_depth_to_color/image_raw"/>
+        <arg name="rgb_topic" value="/camera/color/image_raw"/>
+        <arg name="camera_info_topic" value="/camera/color/camera_info"/>
+        <arg name="visual_odometry" value="false"/>
+        <arg name="odom_topic" value="/odometry/filtered"/>
+        <!-- <arg name="odom_frame_id" value="odom"/> -->
+        <arg name="queue_size" value="30"/>
+        <!-- <arg name="publish_tf" value="true"/> -->
+        <param name="RGBD/OptimizeStrategy" type="string" value="2"/>
+        <param name="RGBD/OptimizeRobust" type="string" value="true"/>
+        <param name="RGBD/OptimizeMaxError" type="string" value="0"/>
+    </include>
+</launch>

@@ -26,8 +26,13 @@ One Arduino is responsible for `driver` (*writing* to motors) and the other is r
 `encoders` - Read from motors
 
 * Arduino UNO
-* `encoders.ino` implements open-source code for the LM7366 encoder counters and modifies it to publish encoder ticks to `lwheel` and `rwheel`.
-* It also publishes the joint states of each wheel to be collected by astro_state_publisher.
+* `encoders.ino` implements open-source code for the LM7366 encoder counters and modifies it to publish the joint states of each wheel to be collected by `astro_state_publisher`.
+
+`encoders_alternate` - Read from motors
+
+* Arduino UNO
+* Does the same as `encoders` but also publishes encoder ticks to `lwheel` and `rwheel`. This is no longer used since the `diff_tf` node is no longer used by `astro_diff_drive`  (in favor of a simpler method requiring only joint states).
+
 
 `imu` - Publish raw IMU data
 
@@ -37,10 +42,17 @@ One Arduino is responsible for `driver` (*writing* to motors) and the other is r
 * With these optimizations, it was possible to bring the memory usage down to 89% stable.
 * Publishes to `imu/raw`
 
+`imu_minified` - Publish raw IMU data
+
+* Arduino Nano
+* Publishes only what is necessary for `robot_localization` to do its magic (i.e. one complete `Imu` message)
+* Published temperature... just to have
+* Although it takes the same amount of dynamic memory, it runs much faster.
+* Publishes to `imu/raw`
 
 
 `test`
 
-* Manually read and write to the motors without depending on ROS. This is how we can run velocity/pwm test, ensure electronics are working, etc.
+* Manually read and write to the motors without depending on ROS. This is how we can run velocity/pwm tests, ensure electronics are working, etc.
 * Generate calibration data for IMU
 * Test IMU functionality (also used to measure covariances)

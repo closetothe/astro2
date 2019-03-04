@@ -1,0 +1,7 @@
+rate: 20
+base_width: 0.5408
+wheel_radius: 0.0762
+#twist_topic: "wheels/twist"
+joint_state_topic: "joints/wheels"
+queue_size: 10
+twist_covariance_diagonals: [0.001, 1000000.0, 1000000.0, 1000000.0, 1000000.0, 0.001]

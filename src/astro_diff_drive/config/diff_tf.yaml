@@ -1,0 +1,9 @@
+rate: 20
+base_width: 0.5408
+odom_frame_id: "odom"
+odom_topic: "wheels/odom"
+ticks_meter: 953
+base_width: 0.5408
+enable_tf: false
+pose_covariance_diagonals: [0.02, 0.02, 1000000.0, 1000000.0, 1000000.0, 1.0]
+twist_covariance_diagonals: [0.001, 1000000.0, 1000000.0, 1000000.0, 1000000.0, 0.001]
