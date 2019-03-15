@@ -1,4 +1,4 @@
-sudo apt-get -y install ros-kinetic-ros-control ros-kinetic-ros-controllers ros-kinetic-rosserial-arduino ros-kinetic-rosserial ros-kinetic-ps3joy ros-kinetic-joystick-drivers ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-depthimage-to-laserscan ros-kinetic-robot-localization
+sudo apt-get -y install ros-kinetic-ros-control ros-kinetic-ros-controllers ros-kinetic-rosserial-arduino ros-kinetic-rosserial ros-kinetic-ps3joy ros-kinetic-joystick-drivers ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-depthimage-to-laserscan ros-kinetic-robot-localization ros-kinetic-navigation ros-kinetic-rtabmap-ros
 
 source ~/.bashrc
 
